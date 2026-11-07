@@ -14,6 +14,17 @@ public class GlobalExceptionHandler {
         public BusinessException(String message) { super(message); }
     }
 
+    public static class ResourceNotFoundException extends RuntimeException {
+        public ResourceNotFoundException(String message) { super(message); }
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleNotFound(ResourceNotFoundException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("error", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<Map<String, String>> handleBusiness(BusinessException ex) {
         Map<String, String> response = new HashMap<>();
